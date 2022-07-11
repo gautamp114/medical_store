@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from product.models import (
-    Attachment, 
+    Attachments, 
     Brand,
     Category, 
     Product, 
@@ -31,6 +31,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 ## admin panel creation ends
+
 
 ## for choices
 class GenericNameChoicesSerializer(serializers.ModelSerializer):
@@ -81,5 +82,5 @@ class ProductDetailSerializer(serializers.ModelSerializer):
 ## attachment serializer starts
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Attachment
+        model = Attachments
         fields = ('file_name','attachment',)

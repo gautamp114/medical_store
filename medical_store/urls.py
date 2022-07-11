@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/country/',include('country.api.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/product/',include('product.api.urls')),
+    path('api/order/',include('order.api.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

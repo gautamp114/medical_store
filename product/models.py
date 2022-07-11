@@ -30,7 +30,6 @@ class GenericName(models.Model):
 
 class Brand(models.Model):
     name = models.CharField(max_length=250)
-    category = models.ForeignKey(Category, related_name="brand_category", on_delete=models.CASCADE)
     generic = models.ForeignKey(GenericName, related_name="brand_generic", on_delete=models.CASCADE)
 
     class Meta:
@@ -42,9 +41,7 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name="product_category", on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, related_name="product_brand", on_delete=models.CASCADE)
-    generic = models.ForeignKey(GenericName, related_name="product_generic", on_delete=models.CASCADE)
     name = models.CharField(max_length=250)
     no_of_pieces = models.IntegerField(default=3)
     description = models.TextField(max_length=1000)
@@ -70,7 +67,7 @@ class Product(models.Model):
             return 'media/products/default.jpg'
 
 
-class Attachment(models.Model):
+class Attachments(models.Model):
     uploaded_by = models.ForeignKey(
         User, related_name="attachment_uploaded_by", on_delete=models.SET_NULL, null=True
     )

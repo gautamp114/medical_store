@@ -1,5 +1,5 @@
-from accounts.api.permissions import IsAdminUser
-from product.models import Brand, Category, GenericName, Product
+from accounts.api.permissions import IsAdminUser, IsAllUser
+from product.models import Brand, Category, GenericName, Product, Attachments
 from product.api.serializers import (
     AttachmentSerializer,
     BrandSerializer, 
@@ -13,7 +13,7 @@ from product.api.serializers import (
 )
 
 from rest_framework import generics
-
+from rest_framework.parsers import FormParser, MultiPartParser
 
 ## views for Category
 class CategoryCreateAPIView(generics.CreateAPIView):
@@ -89,6 +89,7 @@ class BrandDeleteAPIView(generics.DestroyAPIView):
 
 ## views for product
 class ProductCreateAPIView(generics.CreateAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAdminUser]
     serializer_class = ProductSerializer
 
@@ -99,6 +100,7 @@ class ProductListAPIView(generics.ListAPIView):
     
 
 class ProductUpdateAPIView(generics.UpdateAPIView):
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [IsAdminUser]
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
@@ -125,7 +127,6 @@ class GetBrandAPIView(generics.ListAPIView):
     serializer_class = BrandChoicesSerializer
 
     def get_queryset(self):
-        # category = self.request.GET.get('category',None)
         generic = self.request.GET.get('generic',None)
         queryset = Brand.objects.all()
         return queryset.filter(generic__id=generic)
@@ -149,7 +150,30 @@ class GetProductDetailAPIView(generics.RetrieveAPIView):
 ## attachment
 
 class AttachmentCreateView(generics.CreateAPIView):
-    permission_class = ['IsAllUser']
+    parser_classes = (MultiPartParser, FormParser)
+    permission_class = [IsAllUser]
     serialier_class = AttachmentSerializer
+
+    def perform_create(self,serializer):
+        serializer.save(
+            uploaded_by = self.request.user,
+            file_name=self.request.FILES.get('attachment').name,
+        )
+
+class AttachmentUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = AttachmentSerializer
+    permission_classes = [IsAllUser]
+    queryset = Attachments.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+
+    def perform_update(self, serializer):
+        serializer.save(
+            file_name=self.request.FILES.get('attachment').name,
+        )
+
+
+class AttachmentDeleteAPIView(generics.DestroyAPIView):
+    permission_classes = [IsAllUser]
+    queryset = Attachments.objects.all()
 
 ## attachment ends
