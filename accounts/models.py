@@ -19,9 +19,6 @@ class CustomUser(AbstractUser):
     contact_number = PhoneNumberField(
         _("Mobile Number"), unique=True)
     sex = models.CharField(_("Gender"),choices=SEX, max_length=7, default="Male")
-    # country = models.ForeignKey(Country,on_delete=models.CASCADE)
-    # province = models.ForeignKey(Province,on_delete=models.CASCADE)
-    # district = models.ForeignKey(District,on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["id",]

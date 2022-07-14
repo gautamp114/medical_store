@@ -95,11 +95,11 @@ WSGI_APPLICATION = 'medical_store.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'medical_store',
+        'NAME': 'med_db',
         'USER': 'postgres',
         'PASSWORD': 'pramod',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 
